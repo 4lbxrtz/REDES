@@ -1,0 +1,7 @@
+bin
+build
+.idea
+*.tar.gz
+doxygen
+.vscode
+!Makefile
