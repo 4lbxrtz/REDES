@@ -10,8 +10,8 @@
 
 #include <sstream>
 
-#include "utils.h"
-#include "program.h"
+#include "utility.h"
+#include "ftp_server.h"
 
 namespace utils {
 
@@ -62,33 +62,17 @@ void ErrorPrint(const std::string& error) {
  */
 void Run(const int argc, const char* argv[]) {
   std::vector<std::string> arguments(argv, argv + argc);
-  if (argc > 4 || argc < 2) {
+  if (argc < 1) {
     std::cout << "Invalid number of arguments." << std::endl;
     std::cout << argv[1] << std::endl;
     std::cout << std::endl << HelpText();
     exit(EXIT_FAILURE);
-  } else if ((arguments[1] == "--help" || arguments[1] == "-h")) {
+  } else if (argc >= 2 && (arguments[1] == "--help" || arguments[1] == "-h")) {
     std::cout << HelpText() << std::endl;
     exit(EXIT_SUCCESS);
   }
-  int shift = 0;
-  bool preserve_all = false;
-  bool move = false;
-  if (argc == 4) {
-    if (arguments[1] == "-a") {
-      preserve_all = true;
-    } else if (arguments[1] == "-m") {
-      move = true;
-    }
-    ++shift;
-  }
-  std::string input_path = arguments[1 + shift];
-  std::string output_path = arguments[2 + shift];
-  if (move) {
-    MoveFile(input_path, output_path);
-    return;
-  }
-  Copyfile(input_path, output_path, preserve_all);
+  FTPServer server(2121);
+  server.Run();
 }
 
 /**
